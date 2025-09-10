@@ -1,0 +1,92 @@
+doctype html
+html
+  head
+    meta charset="utf-8"
+    title Directional Roth Conversion Sketch
+    link rel="stylesheet" href="/css/base.css"
+  body
+    h1 Directional Roth Conversion Sketch
+    p.subtitle Approximate multi-year impact; coarse assumptions; not tax advice.
+    form#controls
+      .form-group
+        label for="age_primary" Age (Primary)
+        input type="number" name="age_primary" value="60"
+      .form-group
+        label for="age_spouse" Age (Spouse)
+        input type="number" name="age_spouse" value="58"
+      .form-group
+        label for="trad_balance" Traditional Balance
+        input type="number" name="trad_balance" value="750000"
+      .form-group
+        label for="roth_balance" Roth Balance
+        input type="number" name="roth_balance" value="150000"
+      .form-group
+        label for="base_income" Base Income
+        input type="number" name="base_income" value="80000"
+      .form-group
+        label for="social_security_start_year" SS Start (yrs from now)
+        input type="number" name="social_security_start_year" value="7"
+      .form-group
+        label for="social_security_amount" SS Annual Amount
+        input type="number" name="social_security_amount" value="45000"
+      .disclosure
+        button.details-toggle type="button" id="toggle-adv" data-open="false" Show Advanced Assumptions ▾
+      .advanced.hidden
+        .form-group
+          label for="growth_rate" Growth Rate
+          input type="number" step="0.01" name="growth_rate" value="0.05"
+        .form-group
+          label for="inflation_rate" Inflation
+          input type="number" step="0.01" name="inflation_rate" value="0.02"
+        .form-group
+          label for="horizon_years" Horizon (years)
+          input type="number" name="horizon_years" value="30"
+      fieldset
+        legend Conversion Strategy
+        .select-row
+          .form-group
+            label Strategy
+            select name="conversion_strategy" id="strategy"
+              option value="fixed" Fixed Amount
+              option value="fill_bracket" Fill Bracket
+          .form-group#strategy-value-wrapper
+            label Strategy Value
+            input type="number" step="0.01" name="conversion_value" value="0"
+          button type="submit" Run
+
+    #metrics
+      .metric
+        h3 Lifetime Taxes (Prim)
+        div.value --
+      .metric
+        h3 Lifetime Taxes (Base)
+        div.value --
+      .metric
+        h3 Tax Delta
+        div.value --
+      .metric
+        h3 Final Roth % (Prim)
+        div.value --
+      .metric
+        h3 Final Roth % (Base)
+        div.value --
+      .metric
+        h3 Roth % Delta
+        div.value --
+
+    #chart-wrapper
+      #chart-header
+        span.chart-title Income & Taxes
+        label.chart-toggle
+          input type="checkbox" id="show-baseline"
+          | Show Baseline
+      svg#balance-chart
+  #chart-legend
+  #chart-tooltip
+
+    .json-disclosure
+      button#toggle-json type="button" Show Raw JSON ▾
+      pre#output.hidden
+    footer This tool provides approximate directional estimates. It omits many tax nuances (credits, deductions, capital gains, phaseouts, state tax). Use for planning ranges only.
+
+  script src="/js/app.js"
