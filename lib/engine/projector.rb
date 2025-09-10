@@ -100,7 +100,12 @@ module Engine
         scenario: @strategy.description,
         years: years,
         totals: aggregate(years),
-        brackets: TaxTables.federal_brackets(@inputs.current_year, @inputs.inflation_rate) # base-year brackets for labeling
+        brackets: TaxTables.federal_brackets(@inputs.current_year, @inputs.inflation_rate), # base-year brackets for labeling
+        standard_deduction: TaxTables.standard_deduction(
+          @inputs.current_year,
+          @inputs.inflation_rate,
+          [@inputs.age_primary >= 65 ? 1 : 0, (@inputs.age_spouse && @inputs.age_spouse >= 65) ? 1 : 0].sum
+        )
       )
 
       baseline_strategy = Strategy::FixedAmount.new(amount: 0)
@@ -160,7 +165,17 @@ module Engine
         )
         year += 1; age_p += 1; age_s += 1 if age_s
       end
-  OpenStruct.new(scenario: @strategy.description, years: years, totals: aggregate(years), brackets: TaxTables.federal_brackets(@inputs.current_year, @inputs.inflation_rate))
+      OpenStruct.new(
+        scenario: @strategy.description,
+        years: years,
+        totals: aggregate(years),
+        brackets: TaxTables.federal_brackets(@inputs.current_year, @inputs.inflation_rate),
+        standard_deduction: TaxTables.standard_deduction(
+          @inputs.current_year,
+          @inputs.inflation_rate,
+          [@inputs.age_primary >= 65 ? 1 : 0, (@inputs.age_spouse && @inputs.age_spouse >= 65) ? 1 : 0].sum
+        )
+      )
     end
 
     private
